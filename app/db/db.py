@@ -100,7 +100,6 @@ class Solution(Base):
     mark = Column(Integer, nullable=True)
     is_hidden = Column(Boolean, nullable=False, default=False)
     lengthTestResult = Column(Boolean, nullable=True)
-    formulaTestResult = Column(Boolean, nullable=True)#проверка формул
     autoTestResult = Column(Integer, nullable=True)
     status = Column(String, nullable=True)
     User_id = Column(Integer, ForeignKey('User.id', ondelete='CASCADE'), nullable=False)
