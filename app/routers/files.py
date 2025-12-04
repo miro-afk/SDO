@@ -13,7 +13,7 @@ from app.schemas.files import ResponseUpload
 from app.schemas.others import Error
 from app.schemas.task import TaskInfo, SolutionInfo
 from app.schemas.test import ResponseTest
-from app.testing_pyfiles.test import check_file
+from app.testing_pyfiles.test import check_file, run_c_sharp_tests
 from app.utils.utils import response_with_json
 
 router = APIRouter()
