@@ -13,7 +13,7 @@ from app.schemas.files import ResponseUpload
 from app.schemas.others import Error
 from app.schemas.task import TaskInfo, SolutionInfo
 from app.schemas.test import ResponseTest
-from app.testing_pyfiles.test import check_file, run_c_sharp_tests
+from app.testing_pyfiles.test import check_file, run_tests, run_c_sharp_tests
 from app.utils.utils import response_with_json
 
 router = APIRouter()
@@ -34,6 +34,8 @@ async def upload_solution(task_id: int, authorization: str = Header(...), file: 
             content={"error": check_file[1]}
         )
 
+    file_type = check_file[1]
+
     file_content = await file.read()
 
     # Добавление решения в БД
@@ -41,6 +43,7 @@ async def upload_solution(task_id: int, authorization: str = Header(...), file: 
         code=file_content.decode('utf-8'),
         user_id=check_data['user_id'],
         task_id=task_id,
+        file_type=file_type
     )
 
     # Если решение не добавлено
@@ -96,21 +99,34 @@ async def test_solution(task_id: int, authorization: str = Header(...)):
             content={"error": "Solution not found."}
         )
 
+    file_type = latest_solution.file_type
+
     # Выполнение тестирования
-    res_check = await check_file(
-        task_id,
-        latest_solution.code,
-        latest_solution.id
-    )
+
+    if file_type == ".py":
+        res_check = await run_tests(
+            task_id,
+            latest_solution.code
+        )
+    elif file_type == ".cs":
+        res_check = await run_c_sharp_tests(
+            task_id,
+            latest_solution.code
+        )
+    else:
+        return JSONResponse(
+            status_code=HTTPStatus.BAD_REQUEST,
+            content={"error": "Неизвестный тип файла."}
+        )
 
     response = ResponseTest(
-        status=res_check.execution_status,
-        code_output=res_check.code_output,
-        execution_time=res_check.execution_time,
-        code_length=res_check.code_length,
+        status=res_check["execution_status"],
+        code_output=res_check["status"],
+        execution_time=res_check["total_execution_time"],
+        code_length=res_check["code_length"],
     ).model_dump()
 
-    if res_check.execution_status == "Failed":
+    if res_check["execution_status"] == "Failed":
         return response_with_json(
             HTTPStatus.BAD_REQUEST,
             response

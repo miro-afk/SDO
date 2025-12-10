@@ -97,6 +97,7 @@ class Solution(Base):
     __tablename__ = 'Solution'
     id = Column(Integer, primary_key=True)
     code = Column(String, nullable=False)
+    file_type = Column(String, nullable=False)
     mark = Column(Integer, nullable=True)
     is_hidden = Column(Boolean, nullable=False, default=False)
     lengthTestResult = Column(Boolean, nullable=True)

@@ -9,6 +9,10 @@ from typing import List, Dict
 from app.db.task_methods import get_test_cases_by_task, update_solution_status
 from  app.schemas.tests import TestCase
 
+from app.config.config import init_config
+
+cfg = init_config()
+
 async def run_tests(task_id: int, code_str: str) -> dict:
     test_cases = get_test_cases_by_task(task_id)
     if not test_cases:
@@ -74,7 +78,7 @@ async def run_tests(task_id: int, code_str: str) -> dict:
         "status": "Success"
     }
 
-async def run_c_sharp_tests(task_id: int, code_str: str, cfg: dict) -> dict: 
+async def run_c_sharp_tests(task_id: int, code_str: str) -> dict: 
     cs_service_cfg = cfg.get('cs_service')
     host = cs_service_cfg.get('host')
     port = cs_service_cfg.get('port')

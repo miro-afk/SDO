@@ -109,7 +109,7 @@ def get_user_solutions_by_task(user_id, task_id):
             raise
 
 
-def add_solution(code, user_id, task_id) -> str | bool:
+def add_solution(code, user_id, task_id, file_type) -> str | bool:
     """
     Добавляет решение в базу данных.
 
@@ -145,7 +145,8 @@ def add_solution(code, user_id, task_id) -> str | bool:
             if not solution_attempts:
                 solution_attempts = SolutionAttempts(
                     User_id=user_id,  # Привязка к пользователю
-                    Task_id=task_id  # Привязка к задаче
+                    Task_id=task_id,  # Привязка к задаче
+                    attempt_count = 0
                 )
             solution_attempts.attempt_count += 1
             session.commit()
@@ -159,6 +160,7 @@ def add_solution(code, user_id, task_id) -> str | bool:
             # Создание нового решения
             solution = Solution(
                 code=code,
+                file_type=file_type,
                 User_id=user_id,  # Привязка к пользователю
                 Task_id=task_id  # Привязка к задаче
             )
@@ -167,7 +169,7 @@ def add_solution(code, user_id, task_id) -> str | bool:
             return True
         except Exception as e:
             session.rollback()
-            return "Error adding solution"
+            return f"Error adding solution: {e}"
 
 
 def update_solution_status(solution_id: int, status: str):

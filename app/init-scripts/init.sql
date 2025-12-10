@@ -69,6 +69,7 @@ CREATE TABLE "Solution"
 (
     id                  SERIAL PRIMARY KEY,
     code                TEXT    NOT NULL,
+    file_type           TEXT    NOT NULL,
     mark                INTEGER,
     is_hidden           BOOLEAN DEFAULT false,
     "lengthTestResult"  BOOLEAN,

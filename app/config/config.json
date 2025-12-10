@@ -2,21 +2,21 @@
 	"database": {
 		"host": "db",
 		"port": 5432,
-	  	"user": "root",
-	  	"password": "root",
+		"user": "root",
+		"password": "root",
 		"name": "postgres"
 	},
-  	"app": {
-	  	"host": "0.0.0.0",
+	"app": {
+		"host": "0.0.0.0",
 		"port": 8000
 	},
 	"cs_service": {
-	  	"host": "localhost",
+		"host": "csharp_app",
 		"port": 8080
 	},
-  	"jwt": {
-	  	"secret_key": "secret_key",
-	    "algorithm": "HS256",
-	  	"expires_in": 2592000
+	"jwt": {
+		"secret_key": "secret_key",
+		"algorithm": "HS256",
+		"expires_in": 2592000
 	}
 }
